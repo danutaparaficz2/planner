@@ -158,6 +158,12 @@ class Scheduler:
         """
         Create a schedule for all subjects prioritizing high-importance lecturers.
         
+        The algorithm:
+        1. Sorts lecturers by importance (high-importance first)
+        2. For each lecturer, schedules their subject for all student groups
+        3. Uses lecturer availability calendars to find valid time slots
+        4. Assigns available rooms while avoiding conflicts
+        
         Returns:
             List of scheduled blocks
         """
@@ -167,7 +173,7 @@ class Scheduler:
             if lecturer.is_high_importance
         ]
         
-        # Sort by high importance first
+        # Sort by high importance first (high-importance = False comes last when negated)
         sorted_lecturers = sorted(
             self.lecturers.values(),
             key=lambda l: (not l.is_high_importance, l.id)
